@@ -175,6 +175,11 @@ for (const section of SECTIONS) {
 
       html = rewriteLinks(html, outRel, lang, theme)
 
+      // Ссылки на репозитории ведут в организацию, а не на личный аккаунт.
+      // Правится здесь, а не вручную в страницах: исходник перезаписывается
+      // при каждой сборке, и ручная правка в нём не удержалась бы.
+      html = html.replace(/github\.com\/FLS76/g, 'github.com/fworkslab')
+
       html = html.replace(
         LANG_SLOT,
         buildLangBlock(section, lang, theme, outRel) + buildToggle(section, lang, theme, outRel),
