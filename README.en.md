@@ -6,9 +6,9 @@
 
 The site of a one-person project. Programs you launch yourself, and tools that extend other people's work.
 
-[![License](https://img.shields.io/github/license/fworks/fworks.github.io?label=license)](LICENSE)
+[![License](https://img.shields.io/github/license/fworks/fworkslab.github.io?label=license)](LICENSE)
 
-[Русский](README.md) · Site: `fworks.github.io`
+[Русский](README.md) · Site: `fworkslab.github.io`
 
 </div>
 
@@ -64,5 +64,5 @@ paths, the same way GitHub Pages does.
 The site is under [CC BY-NC-ND 4.0](LICENSE): you may read and use it, but not modify it
 or use it commercially. The text is the official one, unaltered.
 
-The products are licensed separately: [Codex](https://github.com/fworks/Codex-dnd-character-sheets)
-under Apache-2.0, the [build-with-me](https://github.com/fworks/build-with-me) skill under CC BY-NC-ND 4.0.
+The products are licensed separately: [Codex](https://github.com/fworkslab/Codex-dnd-character-sheets)
+under Apache-2.0, the [build-with-me](https://github.com/fworkslab/build-with-me) skill under CC BY-NC-ND 4.0.

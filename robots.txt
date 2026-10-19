@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://fworks.github.io/sitemap.xml
+Sitemap: https://fworkslab.github.io/sitemap.xml

@@ -28,7 +28,7 @@ import { fileURLToPath } from 'node:url'
 const ROOT = resolve(process.argv[2] || fileURLToPath(new URL('..', import.meta.url)))
 
 // Адрес сайта в интернете. Используется в canonical, og:url и sitemap.
-const SITE = 'https://fworks.github.io'
+const SITE = 'https://fworkslab.github.io'
 
 /* Разделы без светлого варианта.
    Скилл — по требованию всегда чёрный.

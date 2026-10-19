@@ -6,9 +6,9 @@
 
 Сайт проекта одного человека. Программы, которые запускаются сами, и инструменты, которые дополняют чужое.
 
-[![Лицензия](https://img.shields.io/github/license/fworks/fworks.github.io?label=%D0%BB%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)](LICENSE)
+[![Лицензия](https://img.shields.io/github/license/fworks/fworkslab.github.io?label=%D0%BB%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F)](LICENSE)
 
-[English](README.en.md) · Сайт: `fworks.github.io`
+[English](README.en.md) · Сайт: `fworkslab.github.io`
 
 </div>
 
@@ -63,5 +63,5 @@ node tools/serve.mjs
 Сайт — [CC BY-NC-ND 4.0](LICENSE): читать и использовать можно, изменять и использовать
 в коммерческих целях — нет. Текст лицензии официальный, изменён не был.
 
-Продукты лицензируются отдельно: [Codex](https://github.com/fworks/Codex-dnd-character-sheets) —
-Apache-2.0, навык [build-with-me](https://github.com/fworks/build-with-me) — CC BY-NC-ND 4.0.
+Продукты лицензируются отдельно: [Codex](https://github.com/fworkslab/Codex-dnd-character-sheets) —
+Apache-2.0, навык [build-with-me](https://github.com/fworkslab/build-with-me) — CC BY-NC-ND 4.0.
