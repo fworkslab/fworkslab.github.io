@@ -1,0 +1,1779 @@
+/* F Works — оформление сайта.
+   Палитра снята из логотипа assets/logo.png:
+   красный #AA0000 (20,2 % пикселей), светлый #D10505 (7,8 %), чёрный, белый. */
+
+:root {
+  --red: #aa0000;
+  --red-light: #d10505;
+  --ink: #111111;
+  --ink-soft: #555555;
+  /* Тёмнее, чем кажется нужным на глаз: #8a8a8a на белом давало 3,45:1,
+     а мелкий текст вроде подписей и заголовков таблицы должен держать 4,5:1.
+     Теперь 5,28:1. */
+  --ink-faint: #6b6b73;
+  --paper: #ffffff;
+  --paper-soft: #fafafa;
+  --line: #e4e4e4;
+  --rule: 3px solid var(--red);
+  --maxw: 1080px;
+
+  /* переходы */
+  --t-fast: 140ms cubic-bezier(.4, 0, .2, 1);
+  --t-mid: 260ms cubic-bezier(.22, 1, .36, 1);
+  --t-slow: 520ms cubic-bezier(.22, 1, .36, 1);
+  --lift: -3px;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 17px/1.65 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Появление страницы: содержимое мягно поднимается. */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Появление страницы: содержимое мягко поднимается.
+   Исходное opacity НЕ задаётся: если анимация не поддерживается,
+   блок остаётся видимым. Режим both подставляет from только на время задержки. */
+main > .wrap > * {
+  animation: rise var(--t-slow) both;
+}
+
+main > .wrap > *:nth-child(1) { animation-delay: 0ms; }
+main > .wrap > *:nth-child(2) { animation-delay: 55ms; }
+main > .wrap > *:nth-child(3) { animation-delay: 110ms; }
+main > .wrap > *:nth-child(4) { animation-delay: 165ms; }
+main > .wrap > *:nth-child(5) { animation-delay: 220ms; }
+main > .wrap > *:nth-child(6) { animation-delay: 275ms; }
+main > .wrap > *:nth-child(n+7) { animation-delay: 330ms; }
+
+.site-head {
+  animation: fadein var(--t-mid) ease-out both;
+}
+
+/* ---------- шапка ---------- */
+
+.site-head {
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, .88);
+  backdrop-filter: blur(12px) saturate(1.3);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.site-head__in {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 11px 24px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  flex-shrink: 0;
+}
+
+.brand__logo {
+  height: 44px;
+  width: auto;
+  display: block;
+  transition: transform var(--t-mid);
+}
+
+.brand:hover .brand__logo { transform: scale(1.03); }
+
+.nav {
+  display: flex;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.nav a {
+  position: relative;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 14px;
+  border-radius: 9px;
+  transition: color var(--t-fast), background-color var(--t-fast);
+}
+
+/* Подчёркивание выезжает слева при наведении. */
+.nav a::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 3px;
+  height: 2px;
+  background: var(--red);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--t-mid);
+}
+
+.nav a:hover { color: var(--ink); background: rgba(170, 0, 0, .06); }
+.nav a:hover::after,
+.nav a[aria-current="page"]::after { transform: scaleX(1); }
+.nav a[aria-current="page"] { color: var(--ink); }
+
+/* переключатель языка — маленький сегментированный блок */
+.lang {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.lang a {
+  color: var(--ink-faint);
+  text-decoration: none;
+  font-size: 12px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  transition: color var(--t-fast), background-color var(--t-fast);
+}
+
+.lang a:hover { color: var(--ink); }
+.lang a[aria-current="true"] { background: var(--red); color: #fff; font-weight: 600; }
+
+/* ---------- каркас ---------- */
+
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+main { padding: 56px 0 96px; }
+
+h1 {
+  font-size: 40px;
+  line-height: 1.15;
+  margin: 0 0 20px;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 26px;
+  margin: 64px 0 20px;
+  letter-spacing: -0.01em;
+}
+
+h3 { font-size: 19px; margin: 0 0 8px; }
+
+p { margin: 0 0 16px; }
+
+.lede {
+  font-size: 21px;
+  color: var(--ink-soft);
+  max-width: 62ch;
+}
+
+a {
+  color: var(--red);
+  transition: color var(--t-fast);
+}
+
+a:hover { color: var(--red-light); }
+
+/* Линия-кисть: при появлении разъезжается в стороны. */
+.brush {
+  border: 0;
+  height: 3px;
+  width: 68px;
+  background: var(--red);
+  margin: 28px 0;
+  transform-origin: left center;
+  animation: brush var(--t-slow) 220ms both;
+}
+
+@keyframes brush {
+  from { transform: scaleX(0); opacity: 0; }
+  to   { transform: scaleX(1); opacity: 1; }
+}
+
+/* ---------- слоган ---------- */
+
+.slogan {
+  font-size: 23px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.slogan span { color: var(--red); }
+
+/* ---------- карточки ---------- */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 20px;
+  margin: 28px 0 0;
+}
+
+.card {
+  border: 1px solid var(--line);
+  border-top: var(--rule);
+  padding: 22px;
+  background: var(--paper);
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition:
+    transform var(--t-mid),
+    border-color var(--t-mid),
+    box-shadow var(--t-mid),
+    background-color var(--t-mid);
+}
+
+/* Карточка приподнимается и отбрасывает мягкую тень. */
+a.card:hover {
+  border-color: var(--red);
+  transform: translateY(var(--lift));
+  box-shadow: 0 10px 26px -14px rgba(170, 0, 0, .42);
+}
+
+a.card:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 3px;
+}
+
+.card h3 { margin-bottom: 6px; }
+
+.card p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+
+.card__kind {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--red);
+  margin-bottom: 8px;
+}
+
+/* ---------- метки ---------- */
+
+.tag {
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  margin: 0 6px 6px 0;
+}
+
+.tag--red { border-color: var(--red); color: var(--red); }
+
+/* ---------- кнопки ---------- */
+
+.btn {
+  display: inline-block;
+  background: var(--red);
+  color: #fff;
+  text-decoration: none;
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 15px;
+  border: 2px solid var(--red);
+  margin: 0 8px 10px 0;
+  transition:
+    transform var(--t-fast),
+    background-color var(--t-fast),
+    border-color var(--t-fast),
+    color var(--t-fast),
+    box-shadow var(--t-fast);
+}
+
+.btn:hover {
+  background: var(--red-light);
+  border-color: var(--red-light);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px -10px rgba(170, 0, 0, .5);
+}
+
+.btn:active { transform: translateY(0); }
+
+.btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.btn--ghost { background: transparent; color: var(--red); }
+.btn--ghost:hover { background: var(--red); color: #fff; }
+
+/* ---------- таблицы ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 15px;
+}
+
+th, td {
+  text-align: left;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+th { color: var(--ink-soft); font-weight: 600; font-size: 13px; }
+
+td.num { white-space: nowrap; color: var(--ink-soft); }
+
+/* ---------- списки ---------- */
+
+ul.clean { list-style: none; padding: 0; margin: 0 0 16px; }
+
+ul.clean li {
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 9px;
+}
+
+ul.clean li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 9px;
+  height: 3px;
+  background: var(--red);
+}
+
+/* ---------- скриншоты ---------- */
+
+.shots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  margin: 28px 0;
+}
+
+.shot { margin: 0; }
+
+.shot img {
+  width: 100%;
+  border: 1px solid var(--line);
+  display: block;
+  transition: transform var(--t-mid), border-color var(--t-mid), box-shadow var(--t-mid);
+}
+
+/* Скриншот слегка подрастает при наведении. */
+.shot:hover img {
+  border-color: var(--red);
+  transform: scale(1.012);
+  box-shadow: 0 12px 28px -18px rgba(0, 0, 0, .5);
+}
+
+.shot figcaption {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 8px;
+  transition: color var(--t-fast);
+}
+
+.shot:hover figcaption { color: var(--ink); }
+
+/* ---------- код ---------- */
+
+code {
+  font: 15px/1.5 "SF Mono", Consolas, "Liberation Mono", monospace;
+  background: var(--paper-soft);
+  border: 1px solid var(--line);
+  padding: 1px 6px;
+}
+
+pre {
+  background: var(--paper-soft);
+  border: 1px solid var(--line);
+  border-left: var(--rule);
+  padding: 16px 18px;
+  overflow-x: auto;
+  font: 14px/1.55 "SF Mono", Consolas, "Liberation Mono", monospace;
+}
+
+pre code { background: none; border: 0; padding: 0; }
+
+/* ---------- примечание ---------- */
+
+.note {
+  border-left: var(--rule);
+  background: var(--paper-soft);
+  padding: 16px 20px;
+  margin: 24px 0;
+}
+
+.note p:last-child { margin-bottom: 0; }
+
+/* ---------- роадмап ---------- */
+
+.road { width: 100%; }
+.road td:first-child { font-weight: 600; white-space: nowrap; }
+
+.status { font-size: 13px; padding: 2px 9px; border: 1px solid currentColor; white-space: nowrap; }
+.status--done { color: var(--red); }
+.status--wip { color: var(--ink-faint); }
+.status--plan { color: var(--ink-faint); }
+
+/* ---------- заставка главной ---------- */
+
+.hero {
+  text-align: center;
+  padding: 40px 0 20px;
+}
+
+.hero__logo {
+  width: min(240px, 60vw);
+  height: auto;
+  display: block;
+  margin: 0 auto 32px;
+  animation: hero-in var(--t-slow) both;
+}
+
+@keyframes hero-in {
+  from { opacity: 0; transform: scale(.94); }
+  to   { opacity: 1; transform: none; }
+}
+
+.hero h1 {
+  margin: 0 0 18px;
+  font-size: 46px;
+}
+
+.hero .slogan {
+  font-size: 24px;
+  margin-bottom: 26px;
+}
+
+.hero .lede {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
+}
+
+.hero__links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 34px 0 8px;
+}
+
+/* ---------- подвал ---------- */
+
+.site-foot {
+  border-top: 1px solid var(--line);
+  padding: 32px 0 48px;
+  color: var(--ink-faint);
+  font-size: 14px;
+}
+
+.site-foot__in {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.site-foot a { color: var(--ink-soft); }
+
+/* ---------- лист из приложения Codex ---------- */
+/* Всё снято со скриншота листа персонажа: кремовая бумага с точечной
+   сеткой, секции мелким шрифтом, поля с подчёркиванием и кружком «?». */
+
+.app-stage {
+  background: #0e1013;
+  padding: 30px 18px 34px;
+  margin: 0 -24px 0;
+}
+
+.app-bar {
+  max-width: 980px;
+  margin: 0 auto 18px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  color: #8c8f95;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.app-bar__name {
+  color: #f0f0f0;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+.app-bar__sub { letter-spacing: .12em; }
+
+.app-bar__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.app-bar__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #35c07a;
+  display: inline-block;
+}
+
+.sheet {
+  max-width: 980px;
+  margin: 0 auto;
+  background: #f4efe1;
+  background-image: radial-gradient(circle, rgba(122, 101, 68, .20) 1px, transparent 1px);
+  background-size: 18px 18px;
+  border: 1px solid rgba(122, 101, 68, .32);
+  padding: 34px 32px 40px;
+  color: #241f19;
+}
+
+.sheet__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(122, 101, 68, .30);
+  margin-bottom: 26px;
+}
+
+.sheet__eyebrow {
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #7a6a53;
+  margin: 0 0 10px;
+}
+
+.sheet__title {
+  font-size: 40px;
+  line-height: 1.1;
+  margin: 0;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.sheet__meta {
+  margin-left: auto;
+  text-align: right;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #7a6a53;
+  line-height: 2;
+}
+
+.sheet__meta b { color: #4a4034; font-weight: 600; }
+
+/* секция листа */
+.block {
+  border: 1px solid rgba(122, 101, 68, .28);
+  background: rgba(255, 253, 246, .55);
+  padding: 20px 22px 22px;
+  margin: 0 0 22px;
+}
+
+.block__title {
+  font-size: 10px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #7a6a53;
+  margin: 0 0 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.block__title::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(122, 101, 68, .28);
+}
+
+/* сетка полей */
+.fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px 28px;
+}
+
+.field__label {
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #7a6a53;
+  margin-bottom: 5px;
+}
+
+.field__row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.field__value {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+  color: #241f19;
+  padding: 3px 0 5px;
+  border-bottom: 1px solid rgba(122, 101, 68, .42);
+  overflow-wrap: anywhere;
+}
+
+.field__value--code {
+  font-family: "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+}
+
+/* кружок «?» как в приложении */
+.field__help {
+  flex-shrink: 0;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  border: 1px solid rgba(122, 101, 68, .5);
+  color: #7a6a53;
+  font-size: 11px;
+  line-height: 19px;
+  text-align: center;
+  cursor: default;
+}
+
+.block__note {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #4a4034;
+  margin: 4px 0 0;
+}
+
+.block__note code {
+  background: rgba(122, 101, 68, .12);
+  border-color: rgba(122, 101, 68, .3);
+  font-size: 13px;
+}
+
+/* строка файла: платформа — имя — размер */
+.file {
+  display: grid;
+  grid-template-columns: 110px 1fr auto;
+  gap: 14px;
+  align-items: baseline;
+  padding: 9px 0;
+  border-bottom: 1px solid rgba(122, 101, 68, .22);
+}
+
+.file:last-child { border-bottom: 0; }
+
+.file__plat { font-size: 12px; color: #7a6a53; letter-spacing: .06em; text-transform: uppercase; }
+.file__name { font-family: "SF Mono", Consolas, monospace; font-size: 13px; overflow-wrap: anywhere; }
+.file__size { font-size: 13px; color: #7a6a53; white-space: nowrap; }
+
+/* ---------- появление, привязанное к скроллу ---------- */
+/* Состояние ведёт скрипт: класс is-in ставится, пока элемент в кадре,
+   и снимается, когда уходит. Без задержек и счётчиков — иначе при
+   быстрой прокрутке элементы залипают невидимыми.
+
+   Скрытое состояние включается только под .js: если скрипт не отработал,
+   класс не ставится и всё видно как есть. */
+
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+}
+
+/* ---------- страница приложения Codex ---------- */
+/* Всё снято с двух экранов приложения: стартового и листа персонажа.
+   Страница целиком тёмная, как в приложении, — шва между «обычной»
+   частью и листом нет. */
+
+body.app {
+  background: #07080d;
+  background-image:
+    radial-gradient(70rem 46rem at 50% -14%, rgba(112, 94, 255, .12), transparent 62%),
+    radial-gradient(48rem 34rem at 108% 104%, rgba(150, 130, 255, .07), transparent 62%);
+  background-attachment: fixed;
+  color: #e9eaf2;
+}
+
+body.app .site-head {
+  background: rgba(7, 8, 13, .86);
+  border-bottom-color: rgba(255, 255, 255, .09);
+  backdrop-filter: blur(8px);
+}
+
+body.app .nav a { color: #9aa0b4; }
+body.app .nav a:hover { color: #fff; border-bottom-color: #a99cff; }
+body.app .nav a[aria-current="page"] { color: #fff; border-bottom-color: #a99cff; }
+body.app .lang a { color: #6f7688; }
+body.app .lang a[aria-current="true"] { color: #e9eaf2; }
+
+body.app h1 { color: #fff; }
+body.app h2 { color: #fff; }
+
+/* Заголовок листа и имя в заставке. Правила с body.app h1/h2 сильнее
+   одиночного класса, поэтому без них белый цвет «съедает» тёмный заголовок
+   на кремовой бумаге, а градиент в имени — прозрачность. */
+body.app .sheet__title { color: #241f19; }
+body.app .app-hero__name { color: transparent; }
+body.app .lede { color: #a7adbf; }
+body.app a { color: #a99cff; }
+body.app a:hover { color: #c6beff; }
+body.app .tag { border-color: rgba(255, 255, 255, .16); color: #9aa0b4; }
+body.app .tag--red { border-color: #a99cff; color: #b9afff; }
+body.app .card__kind { color: #a99cff; }
+
+body.app .site-foot {
+  border-top-color: rgba(255, 255, 255, .09);
+  color: #6f7688;
+}
+body.app .site-foot a { color: #9aa0b4; }
+
+/* ------- стартовый экран ------- */
+
+.app-hero {
+  text-align: center;
+  padding: 74px 24px 78px;
+  position: relative;
+}
+
+.app-hero__icon {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 26px;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 0 46px -6px rgba(140, 120, 255, .55);
+}
+
+.app-hero__icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.app-hero__kicker {
+  font-size: 11px;
+  letter-spacing: .26em;
+  text-transform: uppercase;
+  color: #8b83c9;
+  margin: 0 0 12px;
+}
+
+.app-hero__name {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(46px, 9vw, 88px);
+  line-height: 1.05;
+  margin: 0 0 14px;
+  font-weight: 400;
+  letter-spacing: -.02em;
+  background: linear-gradient(180deg, #ffffff 25%, #b9a8ff 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.app-hero__sub {
+  font-size: 12px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: #b6b0d8;
+  margin: 0 0 26px;
+}
+
+.app-hero__rule {
+  width: 44px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #8b83c9, transparent);
+  margin: 0 auto 26px;
+}
+
+.app-hero__text {
+  color: #a7adbf;
+  max-width: 46ch;
+  margin: 0 auto 34px;
+}
+
+.app-hero__actions {
+  display: flex;
+  gap: 22px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.app-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 30px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), background-color var(--t-fast);
+}
+
+/* Селекторы с body.app — иначе правило «body.app a» перебивает цвет
+   кнопки: оно по специфичности сильнее одиночного класса. */
+body.app .app-btn--primary {
+  background: linear-gradient(180deg, #b9a8ff, #8b7bf0);
+  color: #1b1524;
+  border-radius: 12px;
+  box-shadow: 0 10px 26px -12px rgba(150, 132, 255, .85);
+}
+
+body.app .app-btn--primary:hover {
+  color: #1b1524;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -12px rgba(150, 132, 255, .95);
+}
+
+body.app .app-btn--ghost { color: #d5cfe8; }
+body.app .app-btn--ghost:hover { color: #fff; }
+
+/* подпись по центру, как в приложении */
+.app-stamp {
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #7c8398;
+  padding: 0 24px 46px;
+}
+
+/* ------- окна со скриншотами ------- */
+
+.screens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 26px;
+  padding: 0 24px;
+}
+
+.screen { margin: 0; }
+
+.screen__frame {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .13);
+  box-shadow: 0 22px 46px -22px rgba(0, 0, 0, .9);
+  background: #0d0e15;
+  transition: transform var(--t-mid), border-color var(--t-mid), box-shadow var(--t-mid);
+}
+
+.screen:hover .screen__frame {
+  transform: translateY(-3px);
+  border-color: rgba(169, 156, 255, .5);
+  box-shadow: 0 28px 56px -22px rgba(0, 0, 0, .95);
+}
+
+.screen__frame img { width: 100%; display: block; }
+
+.screen figcaption {
+  font-size: 13px;
+  color: #868ca0;
+  margin-top: 10px;
+}
+
+/* ---------- чёрная страница ---------- */
+/* Для инструментов без фирменного цвета приложения: чёрный фон,
+   серые поверхности, красный только как отметка. */
+
+/* Фон задаём и на html, и на body: у body своя заливка из базовых правил,
+   и она перекрыла бы чёрный, если бы красить только html. */
+html[data-theme="dark"] { background: #000; color: #e7e7ea; --ink-faint: #8b8b95; }
+html[data-theme="dark"] body { background: #000; color: #e7e7ea; }
+
+html[data-theme="dark"] .site-head {
+  background: rgba(0, 0, 0, .92);
+  border-bottom-color: #1a1a1e;
+  backdrop-filter: blur(8px);
+}
+
+html[data-theme="dark"] .nav a { color: #8b8b95; }
+html[data-theme="dark"] .nav a:hover { color: #fff; border-bottom-color: #d10505; }
+html[data-theme="dark"] .nav a[aria-current="page"] { color: #fff; border-bottom-color: #d10505; }
+html[data-theme="dark"] .lang a { color: #5f5f69; }
+html[data-theme="dark"] .lang a[aria-current="true"] { color: #e7e7ea; }
+
+html[data-theme="dark"] h1, html[data-theme="dark"] h2, html[data-theme="dark"] h3 { color: #fff; }
+html[data-theme="dark"] .lede { color: #9c9ca6; }
+html[data-theme="dark"] a { color: #fff; }
+html[data-theme="dark"] a:hover { color: #d10505; }
+
+html[data-theme="dark"] .tag { border-color: #24242a; color: #8b8b95; }
+html[data-theme="dark"] .tag--red { border-color: #d10505; color: #ff6b6b; }
+html[data-theme="dark"] .card__kind { color: #ff6b6b; }
+
+html[data-theme="dark"] .card {
+  background: #0a0a0c;
+  border-color: #1c1c20;
+  border-top: 2px solid #d10505;
+}
+
+html[data-theme="dark"] a.card:hover { border-color: #d10505; box-shadow: none; }
+
+html[data-theme="dark"] .note { background: #0a0a0c; border-left-color: #d10505; color: #c9c9d1; }
+
+html[data-theme="dark"] pre {
+  background: #08080a;
+  border-color: #1c1c20;
+  border-left-color: #d10505;
+}
+
+html[data-theme="dark"] code { background: #141419; border-color: #24242a; color: #e7e7ea; }
+html[data-theme="dark"] pre code { background: none; border: 0; }
+
+html[data-theme="dark"] table th, html[data-theme="dark"] table td { border-bottom-color: #1c1c20; }
+html[data-theme="dark"] th { color: #8b8b95; }
+html[data-theme="dark"] .brush { background: #d10505; }
+
+/* Статусы в роадмапе: тёмно-красный на чёрном не читается */
+html[data-theme="dark"] .status--done { color: #ff6b6b; }
+html[data-theme="dark"] .status--wip,
+html[data-theme="dark"] .status--plan { color: #6b6b75; }
+html[data-theme="dark"] .road td:first-child { color: #fff; }
+
+/* Слоган на главной */
+html[data-theme="dark"] .slogan { color: #e7e7ea; }
+html[data-theme="dark"] .slogan span { color: #ff6b6b; }
+
+html[data-theme="dark"] .site-foot { border-top-color: #1a1a1e; color: #5f5f69; }
+html[data-theme="dark"] .site-foot a { color: #8b8b95; }
+
+/* шапка по центру: знак, название в две строки, метки, описание.
+   Базовые цвета — для светлой темы, чёрные лежат в переопределении ниже:
+   иначе белый заголовок на белом фоне просто исчезал бы. */
+.tool-head { text-align: center; padding: 62px 24px 10px; }
+
+.tool-head__mark {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper-soft);
+  font-family: "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 25px;
+  color: var(--ink);
+}
+
+.tool-head__name {
+  font-size: clamp(38px, 7vw, 62px);
+  line-height: 1.08;
+  margin: 0 0 10px;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  color: var(--ink);
+}
+
+.tool-head__sub {
+  font-size: 11px;
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin: 0 0 24px;
+}
+
+.tool-head__tags { margin-bottom: 24px; }
+
+.tool-head__text {
+  color: var(--ink-soft);
+  max-width: 50ch;
+  margin: 0 auto 30px;
+}
+
+.tool-head__actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tool-stamp {
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: #6f6f79;
+  padding: 44px 24px 8px;
+}
+
+/* Чёрная тема: тот же блок, но под тёмный фон */
+html[data-theme="dark"] .tool-head__mark {
+  border-color: #2a2a31;
+  background: #0a0a0c;
+  color: #fff;
+}
+
+html[data-theme="dark"] .tool-head__name { color: #fff; }
+html[data-theme="dark"] .tool-head__sub { color: #7c7c86; }
+html[data-theme="dark"] .tool-head__text { color: #9c9ca6; }
+html[data-theme="dark"] .tool-stamp { color: #7c7c86; }
+
+html[data-theme="dark"] .btn { background: #d10505; border-color: #d10505; color: #fff; }
+html[data-theme="dark"] .btn:hover { background: #ff2a2a; border-color: #ff2a2a; color: #fff; }
+html[data-theme="dark"] .btn--ghost { background: transparent; color: #d10505; }
+html[data-theme="dark"] .btn--ghost:hover { background: #d10505; color: #fff; }
+
+/* ---------- переключатель темы ---------- */
+
+/* Это ссылка, а не кнопка: тема задана именем файла, JS на сайте нет.
+   Поэтому нужно явно снять подчёркивание и перебить общие правила для a. */
+.theme-toggle {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink-soft);
+  text-decoration: none;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  line-height: 0;
+  transition:
+    color var(--t-fast),
+    border-color var(--t-fast),
+    background-color var(--t-fast),
+    transform var(--t-fast);
+}
+
+.theme-toggle:hover {
+  color: var(--red);
+  border-color: var(--red);
+  transform: rotate(-12deg);
+}
+
+.theme-toggle:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.theme-toggle svg { width: 17px; height: 17px; }
+
+/* В тёмной теме — солнце (переключит на светлую), в светлой — луна */
+.theme-toggle__sun { display: none; }
+html[data-theme="dark"] .theme-toggle__sun { display: block; }
+html[data-theme="dark"] .theme-toggle__moon { display: none; }
+
+html[data-theme="dark"] .theme-toggle {
+  background: #0a0a0c;
+  border-color: #2a2a31;
+  color: #d8d8de;
+}
+
+html[data-theme="dark"] .theme-toggle:hover { color: #ff6b6b; border-color: #d10505; }
+
+/* ---------- адаптив ---------- */
+
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  h1 { font-size: 31px; }
+  h2 { font-size: 22px; margin-top: 48px; }
+  .lede { font-size: 18px; }
+  .slogan { font-size: 20px; }
+  main { padding: 36px 0 64px; }
+  .site-head__in { gap: 14px; padding: 12px 18px; }
+  .brand__logo { height: 38px; }
+  .nav { gap: 16px; }
+  th, td { padding: 9px 10px; font-size: 14px; }
+}
+
+/* Если в системе выключена анимация, ничего не двигаем. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .brush { opacity: 1; transform: none; }
+  a.card:hover, .btn:hover, .shot:hover img { transform: none; }
+}
+/* ---------- переключение знака ---------- */
+
+/* Эти правила стоят в самом конце файла не просто так. У .hero__logo и
+   .brand__logo объявлен display: block, и при равной специфичности побеждает
+   последнее правило. Пока правило скрытия стояло выше, тёмный знак не
+   прятался — на светлой странице оказывались сразу оба знака. */
+.logo-dark { display: none; }
+
+html[data-theme="dark"] .logo-light,
+body.app .logo-light { display: none; }
+
+html[data-theme="dark"] .logo-dark,
+body.app .logo-dark { display: block; }
+/* ---------- разделы: шапка, карточки, роадмап ---------- */
+
+/* Всё в этом блоке перекрывает прежние правила: расположен после них,
+   поэтому можно не вычислять специфичность вручную. */
+
+main { padding-bottom: 80px; }
+
+/* Шапка раздела. Заменяет <h1> + .lede + <hr class="brush">:
+   на широком экране заголовок и описание встают в две колонки,
+   и страница перестаёт быть пустой справа. */
+.sec-head {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4px;
+  margin-bottom: 40px;
+  padding-bottom: 26px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+
+.sec-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 84px;
+  height: 2px;
+  background: var(--red);
+}
+
+.sec-head__eyebrow {
+  margin: 0 0 10px;
+  font-size: 11px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.sec-head__title {
+  margin: 0;
+  font-size: clamp(32px, 5vw, 46px);
+  line-height: 1.06;
+  letter-spacing: -.025em;
+}
+
+.sec-head__lede {
+  margin: 12px 0 0;
+  font-size: 18px;
+  line-height: 1.62;
+  color: var(--ink-soft);
+  max-width: 56ch;
+}
+
+@media (min-width: 900px) {
+  .sec-head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+    column-gap: 56px;
+    align-items: end;
+  }
+  .sec-head__eyebrow { grid-column: 1 / -1; }
+  .sec-head__lede { margin-top: 0; padding-bottom: 4px; }
+}
+
+/* ---------- карточки ---------- */
+
+.cards {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 26px 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--paper-soft);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    transform var(--t-mid),
+    border-color var(--t-mid),
+    background-color var(--t-mid),
+    box-shadow var(--t-mid);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--red);
+  background: var(--paper);
+  box-shadow: 0 20px 40px -28px rgba(0, 0, 0, .7);
+}
+
+.card__mark {
+  width: 52px;
+  height: 52px;
+  border-radius: 13px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.card__mark img { width: 34px; height: 34px; display: block; }
+
+.card__glyph {
+  font-family: "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 16px;
+  letter-spacing: .02em;
+  color: var(--ink);
+}
+
+.card__kind {
+  margin: 0 0 8px;
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.card h3 {
+  margin: 0 0 10px;
+  font-size: 23px;
+  letter-spacing: -.015em;
+}
+
+.card p {
+  margin: 0;
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.card__foot {
+  margin-top: 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.card__go {
+  margin-left: auto;
+  font-size: 17px;
+  line-height: 1;
+  color: var(--red);
+  transition: transform var(--t-mid);
+}
+
+.card:hover .card__go { transform: translateX(5px); }
+
+/* Единственная карточка в разделе — во всю ширину, знак слева. */
+.cards--feature { grid-template-columns: 1fr; }
+
+@media (min-width: 820px) {
+  .cards--feature .card {
+    display: grid;
+    grid-template-columns: 84px minmax(0, 1fr);
+    column-gap: 28px;
+    align-content: start;
+  }
+  .cards--feature .card__mark {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    width: 84px;
+    height: 84px;
+    margin-bottom: 0;
+    border-radius: 20px;
+  }
+  .cards--feature .card__mark img { width: 52px; height: 52px; }
+  .cards--feature .card__glyph { font-size: 24px; }
+  .cards--feature .card__kind,
+  .cards--feature .card h3,
+  .cards--feature .card p,
+  .cards--feature .card__foot { grid-column: 2; }
+}
+
+/* ---------- счётчики ---------- */
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 36px;
+}
+
+.stat {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 9px 17px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-soft);
+}
+
+.stat__num { font-size: 20px; font-weight: 700; line-height: 1; color: var(--ink); }
+.stat__label { font-size: 13px; color: var(--ink-faint); }
+
+/* ---------- таблица роадмапа ---------- */
+
+.road { border-collapse: separate; border-spacing: 0; }
+
+.road thead th {
+  text-align: left;
+  padding: 0 18px 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.road tbody tr { transition: background-color var(--t-fast); }
+.road tbody tr:hover { background: var(--paper-soft); }
+
+.road td {
+  padding: 20px 18px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  color: var(--ink-soft);
+}
+
+.road td:first-child {
+  position: relative;
+  padding-left: 22px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink);
+}
+
+.road td:first-child::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  border-radius: 2px;
+  background: var(--red);
+}
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 13px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 12px;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+.status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ---------- две колонки внизу роадмапа ---------- */
+
+.panels {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 22px;
+  margin-top: 48px;
+}
+
+@media (min-width: 860px) {
+  .panels { grid-template-columns: 1fr 1fr; }
+}
+
+.panel h2 {
+  margin: 0 0 14px;
+  font-size: 21px;
+}
+
+.panel p { color: var(--ink-soft); }
+
+/* ---------- тёмная тема для новых блоков ---------- */
+
+html[data-theme="dark"] .sec-head { border-bottom-color: #1c1c20; }
+html[data-theme="dark"] .sec-head__eyebrow { color: #7e7e88; }
+html[data-theme="dark"] .sec-head__title { color: #fff; }
+html[data-theme="dark"] .sec-head__lede { color: #9c9ca6; }
+
+html[data-theme="dark"] .card { background: #0a0a0c; border: 1px solid #1c1c20; border-radius: 14px; }
+html[data-theme="dark"] .card:hover { background: #101014; border-color: #d10505; }
+html[data-theme="dark"] .card__mark { background: #101014; border-color: #24242a; }
+html[data-theme="dark"] .card__glyph { color: #e7e7ea; }
+html[data-theme="dark"] .card__kind { color: #7e7e88; }
+html[data-theme="dark"] .card h3 { color: #fff; }
+html[data-theme="dark"] .card p { color: #9c9ca6; }
+html[data-theme="dark"] .card__foot { border-top-color: #1c1c20; }
+/* Фирменный красный на чёрном даёт 2,55:1 — для стрелки мало */
+html[data-theme="dark"] .card__go { color: #ff6b6b; }
+
+html[data-theme="dark"] .stat { background: #0a0a0c; border-color: #1c1c20; }
+html[data-theme="dark"] .stat__num { color: #fff; }
+html[data-theme="dark"] .stat__label { color: #7e7e88; }
+
+html[data-theme="dark"] .road thead th { color: #7e7e88; border-bottom-color: #1c1c20; }
+html[data-theme="dark"] .road td { border-bottom-color: #1c1c20; color: #9c9ca6; }
+html[data-theme="dark"] .road tbody tr:hover { background: #0a0a0c; }
+html[data-theme="dark"] .road td:first-child { color: #fff; }
+html[data-theme="dark"] .status--wip,
+html[data-theme="dark"] .status--plan { color: #7e7e88; }
+
+/* Подвал и язык в тёмной теме тоже не дотягивали до 4,5:1 */
+html[data-theme="dark"] .site-foot { color: #7c7c86; }
+html[data-theme="dark"] .lang a { color: #8b8b95; }
+/* #d10505 на чёрном — 3,73:1, берём тот же осветлённый красный, что и в остальном */
+html[data-theme="dark"] .btn--ghost { color: #ff6b6b; }
+html[data-theme="dark"] .btn--ghost:hover { background: #ff6b6b; color: #1b0505; }
+
+html[data-theme="dark"] .panel p { color: #9c9ca6; }
+/* ---------- метки в шапке раздела ---------- */
+
+.sec-head__chips {
+  grid-column: 1 / -1;
+  margin: 20px 0 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ---------- плитки «как это устроено» ---------- */
+
+.feats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+.feat {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 18px 16px;
+  background: var(--paper-soft);
+}
+
+.feat__n {
+  display: block;
+  font-size: 11px;
+  letter-spacing: .16em;
+  color: var(--red);
+  margin-bottom: 9px;
+}
+
+.feat__t {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.feat__d {
+  display: block;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+/* ---------- роадмап линией ---------- */
+
+.tl {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+
+/* Линия идёт на каждом пункте, кроме последнего, от центра своей точки
+   до центра следующей. Один общий отрезок на весь список уезжал
+   ниже последней точки. */
+/* top: 11px — центр точки (3 сверху + 8 радиуса). height: 100% доводит
+   отрезок ровно до центра следующей точки: там начинается следующий пункт. */
+.tl__item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 11px;
+  width: 2px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.tl__item {
+  position: relative;
+  padding-left: 42px;
+  padding-bottom: 34px;
+}
+
+.tl__item:last-child { padding-bottom: 0; }
+
+.tl__dot {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--line);
+}
+
+.tl__item--done .tl__dot { border-color: var(--red); background: var(--red); }
+.tl__item--wip .tl__dot { border-color: var(--red); background: var(--paper); }
+
+.tl__head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.tl__title {
+  margin: 0;
+  font-size: 21px;
+  letter-spacing: -.01em;
+}
+
+.tl__text {
+  margin: 9px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 64ch;
+}
+
+.panel { margin-top: 46px; }
+.panels .panel { margin-top: 0; }
+
+/* ---------- тёмная тема ---------- */
+
+html[data-theme="dark"] .feat { background: #0a0a0c; border-color: #1c1c20; }
+html[data-theme="dark"] .feat__t { color: #fff; }
+html[data-theme="dark"] .feat__d { color: #9c9ca6; }
+html[data-theme="dark"] .feat__n { color: #ff6b6b; }
+
+html[data-theme="dark"] .tl__item:not(:last-child)::before { background: #24242a; }
+html[data-theme="dark"] .tl__dot { background: #000; border-color: #2a2a31; }
+html[data-theme="dark"] .tl__item--done .tl__dot { background: #d10505; border-color: #d10505; }
+html[data-theme="dark"] .tl__item--wip .tl__dot { background: #000; border-color: #d10505; }
+html[data-theme="dark"] .tl__title { color: #fff; }
+html[data-theme="dark"] .tl__text { color: #9c9ca6; }
+/* ---------- переключатель языка: скользящая плашка ---------- */
+
+/* Раньше активный язык просто заливался красным. Теперь это две доли
+   и подложка, которая ездит между ними: слева на русской странице,
+   справа на английской. Переключение по-прежнему обычная ссылка,
+   скрипта нет — положение плашки задаёт data-lang на самом блоке. */
+
+.lang {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-soft);
+}
+
+.lang::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: var(--red);
+  transition: transform var(--t-mid);
+}
+
+.lang[data-lang="en"]::before { transform: translateX(100%); }
+
+.lang a {
+  position: relative;
+  z-index: 1;
+  min-width: 40px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: none;
+  border: 0;
+  text-align: center;
+  text-decoration: none;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--ink-faint);
+  transition: color var(--t-fast);
+}
+
+.lang a:hover { color: var(--ink); }
+.lang a[aria-current="true"] { color: #fff; font-weight: 600; }
+
+html[data-theme="dark"] .lang { background: #0a0a0c; border-color: #2a2a31; }
+html[data-theme="dark"] .lang::before { background: #d10505; }
+html[data-theme="dark"] .lang a { color: #8b8b95; }
+html[data-theme="dark"] .lang a:hover { color: #e7e7ea; }
+html[data-theme="dark"] .lang a[aria-current="true"] { color: #fff; }
+/* ---------- Кодекс: шапка и подвал отдельно ---------- */
+
+/* У страницы Кодекса нет атрибута data-theme — своё оформление живёт
+   в body.app. Значит общие тёмные правила к ней не относятся, и без
+   этих строк переключатель языка остаётся светлым пятном на чёрном. */
+
+body.app .lang { background: #0a0a0c; border-color: #2a2a31; }
+body.app .lang::before { background: #d10505; }
+body.app .lang a { color: #8b8b95; }
+body.app .lang a:hover { color: #e7e7ea; }
+body.app .lang a[aria-current="true"] { color: #fff; }
+
+body.app .site-foot__in { color: #8b8b95; }
+body.app .site-foot a { color: #9aa0b4; }
+body.app .site-foot { border-top-color: rgba(255, 255, 255, .09); }
+/* ---------- запланированные пункты роадмапа ---------- */
+
+/* То, что только в планах, показывается сдержанно: пустая точка,
+   приглушённое название и никаких описаний. Список длинный, и подробности
+   ему только мешали бы. */
+.tl__item--plan { padding-bottom: 18px; }
+
+.tl__item--plan .tl__dot {
+  border-color: var(--line);
+  background: var(--paper);
+  width: 13px;
+  height: 13px;
+  top: 5px;
+}
+
+.tl__item--plan .tl__title {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--ink-faint);
+}
+
+.tl__item--plan .tl__head { gap: 12px; }
+
+/* Статусы «в планах» и «под вопросом» — тише, чем «вышел» */
+.status--plan,
+.status--maybe {
+  color: var(--ink-faint);
+  border-style: dashed;
+}
+
+.status--maybe { opacity: .8; }
+
+html[data-theme="dark"] .tl__item--plan .tl__dot {
+  border-color: #2a2a31;
+  background: #000;
+}
+
+html[data-theme="dark"] .tl__item--plan .tl__title { color: #7e7e88; }
+html[data-theme="dark"] .status--plan,
+html[data-theme="dark"] .status--maybe { color: #8b8b95; }
+/* ---------- страница 404 ---------- */
+
+/* Пути на этой странице корневые (/products/, /style.css), а не относительные:
+   GitHub Pages отдаёт 404.html по адресу запрошенного пути, и относительная
+   ссылка тогда указывала бы в никуда. */
+
+.nf {
+  text-align: center;
+  padding: 72px 0 40px;
+}
+
+.nf__code {
+  margin: 0 0 16px;
+  font-size: clamp(64px, 13vw, 132px);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -.05em;
+  color: var(--red);
+}
+
+.nf__title {
+  margin: 0 0 12px;
+  font-size: 28px;
+  letter-spacing: -.015em;
+}
+
+.nf__text {
+  margin: 0 auto 34px;
+  max-width: 46ch;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.nf__text em {
+  display: block;
+  margin-top: 8px;
+  font-style: normal;
+  font-size: 15px;
+  color: var(--ink-faint);
+}
+
+.nf__links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+html[data-theme="dark"] .nf__title { color: #fff; }
+html[data-theme="dark"] .nf__text { color: #9c9ca6; }
+html[data-theme="dark"] .nf__text em { color: #7e7e88; }

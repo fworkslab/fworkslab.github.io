@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-with-me — a skill for coding agents — F Works</title>
+<meta name="description" content="A skill that turns work done with a human into a build-along tutorial. Mistakes kept, every step explained.">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../reveal.js" defer></script>
+
+<link rel="canonical" href="https://fworks.github.io/other/build-with-me/index.en.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="F Works">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="build-with-me — a skill for coding agents — F Works">
+<meta property="og:description" content="A skill that turns work done with a human into a build-along tutorial. Mistakes kept, every step explained.">
+<meta property="og:url" content="https://fworks.github.io/other/build-with-me/index.en.html">
+<meta property="og:image" content="https://fworks.github.io/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../assets/favicon-32.png" sizes="32x32">
+<link rel="icon" href="../../assets/favicon-16.png" sizes="16x16">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="site-head__in">
+    <a class="brand" href="../../index.en.html">
+      <img class="brand__logo logo-light" src="../../assets/logo.png" alt="F Works">
+      <img class="brand__logo logo-dark" src="../../assets/logo-dark.png" alt="F Works">
+    </a>
+    <nav class="nav">
+      <a href="../../products/index.en.html">Products</a>
+      <a href="../index.en.html" aria-current="page">Other</a>
+      <a href="../../roadmap/index.en.html">Roadmap</a>
+    </nav>
+    <div class="lang" data-lang="en">
+      <a href="index.html">Rus</a>
+      <a href="index.en.html" aria-current="true">Eng</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="tool-head">
+    <div class="tool-head__mark" aria-hidden="true">bw</div>
+    <h1 class="tool-head__name">build-with-me</h1>
+    <p class="tool-head__sub">Skill for coding agents</p>
+
+    <p class="tool-head__tags">
+      <span class="tag">OpenCode</span>
+      <span class="tag">1,390 lines</span>
+      <span class="tag tag--red">CC BY-NC-ND 4.0</span>
+    </p>
+
+    <p class="tool-head__text">
+      Turns work you and a human just did together into a tutorial: volumes,
+      chapters, every element explained, every line written out live with its
+      reason and its consequence.
+    </p>
+
+    <div class="tool-head__actions">
+      <a class="btn" href="https://github.com/FLS76/build-with-me">View on GitHub</a>
+      <a class="btn btn--ghost" href="#install">Install</a>
+    </div>
+  </section>
+
+  <hr class="brush" data-reveal>
+
+  <div class="wrap" data-reveal-group>
+
+    <h2 data-reveal>The problem it solves</h2>
+
+    <p data-reveal>
+      Most generated documentation explains finished code. The finished code
+      cannot tell you that the build failed twice because a file was locked,
+      that the obvious approach was wrong, that three attempts were tried
+      before one worked. That information exists only in the history of the
+      work.
+    </p>
+
+    <p data-reveal>This skill keeps the mistakes. A step looks like this:</p>
+
+    <div class="note" data-reveal>
+      <p><strong>Why we write this.</strong> Electron has no window until the app reports that it finished booting, and <code>whenReady</code> is that report. Anything visual has to wait for it.</p>
+      <p><strong>What we are writing.</strong> Three things. The import brings in the two Electron pieces we need. <code>whenReady().then</code> schedules work for after boot. <code>BrowserWindow</code> creates the window, and we hold it in a variable.</p>
+      <p><strong>What happens if we leave it out.</strong> Without the import, <code>app</code> is undefined and the app dies on startup. Create the window before <code>whenReady</code> and we get <code>ERR_ELECTRON_BEFORE_READY</code> and an immediate exit. Drop the <code>const win</code> and the window flashes for a fraction of a second and disappears.</p>
+    </div>
+
+    <h2 data-reveal>What comes out</h2>
+
+    <ul class="clean" data-reveal>
+      <li>an opening that says what is being built and why, before any detail;</li>
+      <li>a contents listing of volumes, chapters and elements;</li>
+      <li>every element answered three times: what it is, why it exists, what breaks without it — concretely, not “it is required”;</li>
+      <li>code written out live in prose, not tabulated;</li>
+      <li>two kinds of errors kept apart: the ones that actually happened, quoted verbatim, and the ones a reader starting from a different machine is about to hit;</li>
+      <li>abandoned approaches, recorded so the reader does not spend the same hour.</li>
+    </ul>
+
+    <h3 data-reveal>Structure</h3>
+
+    <pre data-reveal><code>Volume      a major part of the program: a platform, a runtime, a subsystem
+  Chapter   a phase with a checkable outcome: "the build produces a signed APK"
+    Element a file, an asset, an object, a layer — what breaks without it
+      Step  the action, written out, with its reason and its consequence</code></pre>
+
+    <h2 id="install" data-reveal>Install</h2>
+
+    <pre data-reveal><code>npx skills add FLS76/build-with-me@build-with-me -a opencode -g -y</code></pre>
+
+    <p data-reveal>Or copy it yourself — a skill is one file with a YAML header:</p>
+
+    <pre data-reveal><code>~/.config/opencode/skills/build-with-me/SKILL.md</code></pre>
+
+    <h2 data-reveal>It is not only for code</h2>
+
+    <p data-reveal>
+      The structure survives when the project is not a program. Only the
+      vocabulary changes: the element is whatever the reader will come back
+      to when something is broken, and a step is any action named exactly
+      enough to repeat.
+    </p>
+
+    <table data-reveal>
+      <thead>
+        <tr><th>Project</th><th>An element is</th><th>A step is</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Program</td><td>a file</td><td>code</td></tr>
+        <tr><td>Game on an engine</td><td>an asset, an actor, a Blueprint, a level</td><td>a tool call, a console command</td></tr>
+        <tr><td>Blender</td><td>a collection, a modifier, a bone, a keyframe</td><td>an exact operation with its setting</td></tr>
+        <tr><td>Maya, Houdini, ZBrush</td><td>a node, a subtool, an anchor point</td><td>an exact parameter change</td></tr>
+        <tr><td>Spreadsheet, analysis</td><td>a sheet, a named range, a formula</td><td>the formula, with its cell addresses</td></tr>
+        <tr><td>Document</td><td>a heading level, a section, a style</td><td>applying the named style</td></tr>
+        <tr><td>Drawing</td><td>a layer, a pass, a palette</td><td>a stroke with tool, size, angle</td></tr>
+      </tbody>
+    </table>
+
+    <h2 data-reveal>What it will not do</h2>
+
+    <ul class="clean" data-reveal>
+      <li><strong>Pad a small project.</strong> Elements are counted from the machine before any chapter is planned, so a folder holding one file gets one chapter — not two volumes, a contents tree, and eight hundred lines.</li>
+      <li><strong>Invent a past error.</strong> If a step went cleanly, it says so. A tutorial with manufactured problems teaches the reader to expect failures that never occur.</li>
+      <li><strong>Invent a history of troubles it never saw.</strong> Given a repository someone else built, the structure and reasoning still work because they are deduced from the files. What actually went wrong does not — and the tutorial says plainly which parts are reconstructed from the code rather than from the build.</li>
+    </ul>
+
+    <h2 data-reveal>License</h2>
+
+    <div class="note" data-reveal>
+      <p>CC BY-NC-ND 4.0. You may read this material, copy it and share it as long as you do not modify it, do not sell it, and credit F Works. Publishing a modified version is not permitted.</p>
+    </div>
+
+  </div>
+
+  <p class="tool-stamp">skill for agents · author: F Works</p>
+
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <div>F Works</div>
+    <div><a href="https://github.com/FLS76/build-with-me">GitHub</a></div>
+    <div data-year>2026</div>
+  </div>
+</footer>
+
+</body>
+</html>

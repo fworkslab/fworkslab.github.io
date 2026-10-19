@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-with-me — навык для кодинг-агентов — F Works</title>
+<meta name="description" content="Навык, превращающий работу с человеком в туториал «повторяй за мной». Ошибки сохраняются, каждый шаг объясняется.">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../reveal.js" defer></script>
+
+<link rel="canonical" href="https://fworks.github.io/other/build-with-me/index.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="F Works">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:title" content="build-with-me — навык для кодинг-агентов — F Works">
+<meta property="og:description" content="Навык, превращающий работу с человеком в туториал «повторяй за мной». Ошибки сохраняются, каждый шаг объясняется.">
+<meta property="og:url" content="https://fworks.github.io/other/build-with-me/index.html">
+<meta property="og:image" content="https://fworks.github.io/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../assets/favicon-32.png" sizes="32x32">
+<link rel="icon" href="../../assets/favicon-16.png" sizes="16x16">
+<link rel="apple-touch-icon" href="../../assets/apple-touch-icon.png">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="site-head__in">
+    <a class="brand" href="../../index.html">
+      <img class="brand__logo logo-light" src="../../assets/logo.png" alt="F Works">
+      <img class="brand__logo logo-dark" src="../../assets/logo-dark.png" alt="F Works">
+    </a>
+    <nav class="nav">
+      <a href="../../products/index.html">Продукты</a>
+      <a href="../index.html" aria-current="page">Другое</a>
+      <a href="../../roadmap/index.html">Роадмап</a>
+    </nav>
+    <div class="lang" data-lang="ru">
+      <a href="index.html" aria-current="true">Рус</a>
+      <a href="index.en.html">Eng</a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <section class="tool-head">
+    <div class="tool-head__mark" aria-hidden="true">bw</div>
+    <h1 class="tool-head__name">build-with-me</h1>
+    <p class="tool-head__sub">Навык для кодинг-агентов</p>
+
+    <p class="tool-head__tags">
+      <span class="tag">OpenCode</span>
+      <span class="tag">1 390 строк</span>
+      <span class="tag tag--red">CC BY-NC-ND 4.0</span>
+    </p>
+
+    <p class="tool-head__text">
+      Превращает работу, которую вы только что сделали вместе с человеком,
+      в туториал: тома, главы, каждый элемент объяснён, каждая строка
+      написана вживую вместе с причиной и последствием.
+    </p>
+
+    <div class="tool-head__actions">
+      <a class="btn" href="https://github.com/FLS76/build-with-me">Смотреть на GitHub</a>
+      <a class="btn btn--ghost" href="#install">Установка</a>
+    </div>
+  </section>
+
+  <hr class="brush" data-reveal>
+
+  <div class="wrap" data-reveal-group>
+
+    <h2 data-reveal>Какую проблему решает</h2>
+
+    <p data-reveal>
+      Обычная сгенерированная документация объясняет готовый код. Готовый
+      код не может сказать, что сборка падала дважды из-за занятого файла,
+      что очевидный подход оказался неверным, что из трёх попыток сработала
+      четвёртая. Эта информация есть только в истории работы.
+    </p>
+
+    <p data-reveal>Навык сохраняет ошибки. Шаг выглядит так:</p>
+
+    <div class="note" data-reveal>
+      <p><strong>Зачем мы это пишем.</strong> У Electron нет окна, пока приложение не сообщит, что загрузка закончилась, и <code>whenReady</code> — это сообщение. Всё, что видно глазом, обязано ждать его.</p>
+      <p><strong>Что мы пишем.</strong> Три вещи. Импорт приносит две части Electron. <code>whenReady().then</code> назначает работу после загрузки. <code>BrowserWindow</code> создаёт окно, и мы держим его в переменной.</p>
+      <p><strong>Что будет, если это убрать.</strong> Без импорта <code>app</code> не определён, и приложение умирает при старте. Создать окно до <code>whenReady</code> — получим <code>ERR_ELECTRON_BEFORE_READY</code> и мгновенный выход. Убрать <code>const win</code> — окно мелькнёт на долю секунды и исчезнет.</p>
+    </div>
+
+    <h2 data-reveal>Что получается на выходе</h2>
+
+    <ul class="clean" data-reveal>
+      <li>вступление, где сказано, что строится и зачем, до всяких подробностей;</li>
+      <li>оглавление томов, глав и элементов;</li>
+      <li>каждый элемент разобран трижды: что это, зачем он и что сломается без него — конкретно, а не «он необходим»;</li>
+      <li>код, написанный вживую в тексте, а не таблицей;</li>
+      <li>два вида ошибок: те, что случались на самом деле, и те, что читатель встретит на другой машине;</li>
+      <li>заброшенные подходы — чтобы читатель не потратил тот же час.</li>
+    </ul>
+
+    <h3 data-reveal>Структура</h3>
+
+    <pre data-reveal><code>Том     крупная часть программы: платформа, среда, подсистема
+  Глава этап с проверяемым результатом: «сборка даёт подписанный APK»
+    Элемент файл, ресурс, объект, слой — что сломается без него
+      Шаг   действие, описанное с причиной и следствием</code></pre>
+
+    <h2 id="install" data-reveal>Установка</h2>
+
+    <pre data-reveal><code>npx skills add FLS76/build-with-me@build-with-me -a opencode -g -y</code></pre>
+
+    <p data-reveal>Или скопировать вручную — навык это один файл с заголовком YAML:</p>
+
+    <pre data-reveal><code>~/.config/opencode/skills/build-with-me/SKILL.md</code></pre>
+
+    <h2 data-reveal>Не только для кода</h2>
+
+    <p data-reveal>
+      Структура выживает, когда проект не программа. Меняется только словарь:
+      элемент — то, к чему читатель вернётся, когда что-то сломалось,
+      а шаг — любое действие, названное точно настолько, чтобы повторить.
+    </p>
+
+    <table data-reveal>
+      <thead>
+        <tr><th>Проект</th><th>Элемент — это</th><th>Шаг — это</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Программа</td><td>файл</td><td>код</td></tr>
+        <tr><td>Игра на движке</td><td>ассет, актор, Blueprint, уровень</td><td>вызов инструмента, консольная команда</td></tr>
+        <tr><td>Blender</td><td>коллекция, модификатор, кость, ключ</td><td>операция с её настройкой</td></tr>
+        <tr><td>Maya, Houdini, ZBrush</td><td>нода, subtool, точка привязки</td><td>точное изменение параметра</td></tr>
+        <tr><td>Таблица, анализ</td><td>лист, именованный диапазон, формула</td><td>формула с адресами ячеек</td></tr>
+        <tr><td>Документ</td><td>уровень заголовка, раздел, стиль</td><td>применение названного стиля</td></tr>
+        <tr><td>Рисунок</td><td>слой, проход, палитра</td><td>мазок с инструментом, размером, углом</td></tr>
+      </tbody>
+    </table>
+
+    <h2 data-reveal>Чего навык не делает</h2>
+
+    <ul class="clean" data-reveal>
+      <li><strong>Не раздувает маленький проект.</strong> Число элементов считается с машины до планирования, поэтому папка с одним файлом получает одну главу — а не два тома, оглавление и восемьсот строк.</li>
+      <li><strong>Не выдумывает прошлые ошибки.</strong> Если шаг прошёл чисто, так и написано. Туториал с выдуманными проблемами учит читателя ждать отказов, которых не будет.</li>
+      <li><strong>Не выдумывает историю, которой не видел.</strong> Дан чужой репозиторий — структура и рассуждения всё равно выводятся из файлов. Что именно ломалось и что бросили — нет. И туториал прямо говорит, какие части восстановлены из кода, а не из сборки.</li>
+    </ul>
+
+    <h2 data-reveal>Лицензия</h2>
+
+    <div class="note" data-reveal>
+      <p>CC BY-NC-ND 4.0. Материал можно читать, копировать и распространять, если не изменять его, не продавать и указать F Works. Публикация изменённой версии не разрешена.</p>
+    </div>
+
+  </div>
+
+  <p class="tool-stamp">навык для агентов · автор: F Works</p>
+
+</main>
+
+<footer class="site-foot">
+  <div class="site-foot__in">
+    <div>F Works</div>
+    <div><a href="https://github.com/FLS76/build-with-me">GitHub</a></div>
+    <div data-year>2026</div>
+  </div>
+</footer>
+
+</body>
+</html>
