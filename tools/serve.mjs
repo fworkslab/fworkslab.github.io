@@ -1,3 +1,9 @@
+// Локальный просмотр.
+//
+//   node tools/serve.mjs
+//
+// Раздаёт корень сайта на http://127.0.0.1:8099, на неизвестный путь
+// отдаёт 404.html со статусом 404 — как это делает GitHub Pages.
 // Мини-сервер для проверки анимаций. Живёт во временной папке.
 import { createServer } from 'node:http'
 import { readFile } from 'node:fs/promises'
