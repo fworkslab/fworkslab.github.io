@@ -1,85 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://fworkslab.github.io/index.en.html</loc>
-    <lastmod>2026-10-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://fworkslab.github.io/</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/"/>
     <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://fworkslab.github.io/other/build-with-me/index.en.html</loc>
-    <lastmod>2026-10-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://fworkslab.github.io/other/build-with-me/index.html</loc>
-    <lastmod>2026-10-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://fworkslab.github.io/other/index.en.html</loc>
-    <lastmod>2026-10-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://fworkslab.github.io/other/index.html</loc>
-    <lastmod>2026-10-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://fworkslab.github.io/products/codex/index.en.html</loc>
-    <lastmod>2026-10-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://fworkslab.github.io/products/codex/index.html</loc>
-    <lastmod>2026-10-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://fworkslab.github.io/products/index.en.html</loc>
+    <loc>https://fworkslab.github.io/index.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/"/>
     <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://fworkslab.github.io/products/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/products/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/products/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/products/index.html"/>
     <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://fworkslab.github.io/products/noise-dream/index.en.html</loc>
+    <loc>https://fworkslab.github.io/products/index.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/products/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/products/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/products/index.html"/>
     <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://fworkslab.github.io/products/noise-dream/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/products/noise-dream/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/products/noise-dream/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/products/noise-dream/index.html"/>
     <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://fworkslab.github.io/roadmap/index.en.html</loc>
+    <loc>https://fworkslab.github.io/products/noise-dream/index.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/products/noise-dream/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/products/noise-dream/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/products/noise-dream/index.html"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://fworkslab.github.io/products/codex/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/products/codex/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/products/codex/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/products/codex/index.html"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://fworkslab.github.io/products/codex/index.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/products/codex/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/products/codex/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/products/codex/index.html"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://fworkslab.github.io/other/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/other/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/other/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/other/index.html"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://fworkslab.github.io/other/index.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/other/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/other/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/other/index.html"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://fworkslab.github.io/other/build-with-me/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/other/build-with-me/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/other/build-with-me/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/other/build-with-me/index.html"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://fworkslab.github.io/other/build-with-me/index.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/other/build-with-me/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/other/build-with-me/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/other/build-with-me/index.html"/>
     <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://fworkslab.github.io/roadmap/index.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/roadmap/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/roadmap/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/roadmap/index.html"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://fworkslab.github.io/roadmap/index.en.html</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://fworkslab.github.io/roadmap/index.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://fworkslab.github.io/roadmap/index.en.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fworkslab.github.io/roadmap/index.html"/>
     <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

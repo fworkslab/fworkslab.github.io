@@ -113,11 +113,23 @@ function headMeta(html, outRel, section, lang, theme) {
   const locale = lang === 'ru' ? 'ru_RU' : 'en_US'
   const robots = theme === 'light' ? '\n<meta name="robots" content="noindex, follow">' : ''
 
+  // Языковые версии одной страницы. Без hreflang поисковик не знает,
+  // что русская и английская страницы — переводы друг друга, и в выдаче
+  // может показаться не та версия. На светлых страницах меток нет: они
+  // noindex, а Google hreflang вместе с noindex не принимает.
+  const ruUrl = absUrl(posix.join(section, fileName(section, 'ru', 'dark')))
+  const enUrl = absUrl(posix.join(section, fileName(section, 'en', 'dark')))
+  const hreflang = theme === 'dark' ? `
+<link rel="alternate" hreflang="ru" href="${ruUrl}">
+<link rel="alternate" hreflang="en" href="${enUrl}">
+<link rel="alternate" hreflang="x-default" href="${ruUrl}">` : ''
+  const ogAlt = lang === 'ru' ? '\n<meta property="og:locale:alternate" content="en_US">' : ''
+
   return `
-<link rel="canonical" href="${canonical}">
+<link rel="canonical" href="${canonical}">${hreflang}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="F Works">
-<meta property="og:locale" content="${locale}">
+<meta property="og:locale" content="${locale}">${ogAlt}
 <meta property="og:title" content="${title}">
 <meta property="og:description" content="${desc}">
 <meta property="og:url" content="${selfUrl}">
@@ -226,17 +238,27 @@ Allow: /
 Sitemap: ${SITE}/sitemap.xml
 `)
 
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${darkPages
-  .sort()
-  .map((rel) => `  <url>
+// В sitemap попадают только тёмные страницы: светлые — noindex, и
+// перечислять их в карте сайта незачем. У каждой — метки языковых
+// версий, чтобы поисковик знал, какая страница чьим переводом является.
+const urlEntry = (section, lang) => {
+  const rel = posix.join(section, fileName(section, lang, 'dark'))
+  const ru = absUrl(posix.join(section, fileName(section, 'ru', 'dark')))
+  const en = absUrl(posix.join(section, fileName(section, 'en', 'dark')))
+  return `  <url>
     <loc>${absUrl(rel)}</loc>
+    <xhtml:link rel="alternate" hreflang="ru" href="${ru}"/>
+    <xhtml:link rel="alternate" hreflang="en" href="${en}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="${ru}"/>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>${rel === 'index.html' ? '1.0' : '0.7'}</priority>
-  </url>`)
-  .join('\n')}
+  </url>`
+}
+
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${SECTIONS.flatMap((section) => ['ru', 'en'].map((lang) => urlEntry(section, lang))).join('\n')}
 </urlset>
 `
 write('sitemap.xml', sitemap)
