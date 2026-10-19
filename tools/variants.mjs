@@ -179,6 +179,8 @@ for (const section of SECTIONS) {
       // Правится здесь, а не вручную в страницах: исходник перезаписывается
       // при каждой сборке, и ручная правка в нём не удержалась бы.
       html = html.replace(/github\.com\/FLS76/g, 'github.com/fworkslab')
+      // Инструкция установки идёт без полного адреса: npx skills add FLS76/...
+      html = html.replace(/\bFLS76\//g, 'fworkslab/')
 
       html = html.replace(
         LANG_SLOT,
