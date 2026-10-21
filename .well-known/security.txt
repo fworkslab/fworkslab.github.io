@@ -1,0 +1,8 @@
+# F Works — куда сообщать об уязвимостях.
+# Формат по RFC 9116: https://www.rfc-editor.org/rfc/rfc9116
+
+Contact: https://github.com/fworkslab/.github/security/advisories/new
+Policy: https://github.com/fworkslab/.github/security/policy
+Preferred-Languages: ru, en
+Canonical: https://fworkslab.github.io/.well-known/security.txt
+Expires: 2027-10-21T11:07:06Z
