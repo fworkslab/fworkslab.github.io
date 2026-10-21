@@ -29,7 +29,7 @@
 //   node tools/variants.mjs        пересобрать всё
 //   node tools/verify-variants.mjs  проверить, что ссылки ведут куда надо
 
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join, dirname, relative, resolve, posix } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -85,6 +85,13 @@ const absUrl = (rel) => SITE + '/' + (rel === 'index.html' ? '' : rel)
 
 const read = (rel) => readFileSync(join(ROOT, rel), 'utf8')
 const write = (rel, html) => writeFileSync(join(ROOT, rel), html, 'utf8')
+
+/** Запись с созданием каталогов — для файлов в подкаталогах вроде .well-known/. */
+const writeFile = (rel, text) => {
+  const full = join(ROOT, rel)
+  mkdirSync(dirname(full), { recursive: true })
+  writeFileSync(full, text, 'utf8')
+}
 
 /* ------------------------------------------------------------------ */
 /* Метаданные                                                          */
@@ -227,7 +234,7 @@ for (const section of SECTIONS) {
 }
 
 /* ------------------------------------------------------------------ */
-/* robots.txt и sitemap.xml                                            */
+/* robots.txt, sitemap.xml, security.txt                               */
 /* ------------------------------------------------------------------ */
 
 const today = new Date().toISOString().slice(0, 10)
@@ -262,6 +269,30 @@ ${SECTIONS.flatMap((section) => ['ru', 'en'].map((lang) => urlEntry(section, lan
 </urlset>
 `
 write('sitemap.xml', sitemap)
+
+/* security.txt — машинночитаемый канал для сканеров (RFC 9116).
+   Файл лежит в .well-known/, а Jekyll любой каталог с точкой вырезает.
+   Поэтому в корне репозитория должен лежать пустой .nojekyll — иначе
+   security.txt будет в репозитории, но не будет отдан по адресу. */
+const ORG = 'https://github.com/fworkslab/.github'
+
+const expires = new Date()
+expires.setFullYear(expires.getFullYear() + 1)
+const expiresIso = expires.toISOString().replace(/\.\d{3}Z$/, 'Z')
+
+writeFile('.well-known/security.txt', `# F Works — куда сообщать об уязвимостях.
+# Формат по RFC 9116: https://www.rfc-editor.org/rfc/rfc9116
+
+Contact: ${ORG}/security/advisories/new
+Policy: ${ORG}/security/policy
+Preferred-Languages: ru, en
+Canonical: ${SITE}/.well-known/security.txt
+Expires: ${expiresIso}
+`)
+
+// Пустой файл: он отключает обработку Jekyll, и каталоги с точкой
+// (в том числе .well-known) начинают отдаваться как есть.
+writeFile('.nojekyll', '')
 
 console.log('файлов собрано: ' + built.length)
 console.log('sitemap: ' + darkPages.length + ' страниц')
