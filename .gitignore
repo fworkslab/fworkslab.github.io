@@ -5,3 +5,7 @@ desktop.ini
 
 # Временное
 *.log
+
+# Банк контекста
+AGENTS.md
+CONTEXT.md
