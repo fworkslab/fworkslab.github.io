@@ -1777,3 +1777,813 @@ html[data-theme="dark"] .status--maybe { color: #8b8b95; }
 html[data-theme="dark"] .nf__title { color: #fff; }
 html[data-theme="dark"] .nf__text { color: #9c9ca6; }
 html[data-theme="dark"] .nf__text em { color: #7e7e88; }
+
+/* ============================================================
+   Мазок кистью
+   ------------------------------------------------------------
+   Форма мазка задана путём в маске: неровный верх, зубцы следов
+   щетины снизу, рваные торцы. Путь рисует tools/add-brush-css.mjs —
+   с детерминированным шумом, поэтому при каждой сборке он одинаковый.
+
+   Фильтр внутри data-URI не используется: Chrome не рисует маску, у
+   которой в data-URI лежит filter, — элемент с такой маской не виден.
+
+   Всё живёт в CSS, маска — data-URI. Поэтому английские варианты
+   страниц получают её при сборке, без правки разметки.
+
+   Здесь ядро: маски и кнопки. Оформление деталей страниц —
+   в tools/add-design.mjs.
+   ============================================================ */
+
+.brushed-page {
+  --brush-grow: 340ms cubic-bezier(.22, 1, .36, 1);
+
+  /* Цвет мазка. На белом тонкий красный сливается, поэтому
+     в светлой теме он плотнее, в тёмной — светлее. */
+  --brush-color: var(--red);
+
+  /* Мазок: крупные зубцы снизу, рваный верх */
+  --brush-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath d='M0.0 8.7 L5.0 11.6 L10.0 10.7 L15.0 12.1 L20.0 8.6 L25.0 11.7 L30.0 9.4 L35.0 7.8 L40.0 7.4 L45.0 10.5 L50.0 9.9 L55.0 7.5 L60.0 6.7 L65.0 6.6 L70.0 6.4 L75.0 6.8 L80.0 6.7 L85.0 5.3 L90.0 5.7 L95.0 7.5 L100.0 5.9 L105.0 6.9 L110.0 5.9 L115.0 9.1 L120.0 10.0 L125.0 8.6 L130.0 8.4 L135.0 12.0 L140.0 8.8 L145.0 10.2 L150.0 10.2 L155.0 8.6 L160.0 8.4 L165.0 10.0 L170.0 10.1 L175.0 6.8 L180.0 8.3 L185.0 9.0 L190.0 5.8 L195.0 6.7 L200.0 5.4 L200.6 16.4 L202.6 24.2 L199.8 34.3 L202.1 41.2 L200.0 52.0 L150.9 42.6 L162.3 50.7 L122.3 44.7 L133.7 53.7 L93.7 41.7 L105.1 52.0 L65.1 45.4 L76.6 51.7 L36.6 45.4 L48.0 50.0 L8.0 40.8 L19.4 53.0 L-20.6 45.7 L-9.1 52.2 L2.0 20.0 L-0.4 28.6 L1.5 40.8 L1.0 49.9 Z' fill='%23fff'/%3E%3C/svg%3E");
+  /* Тонкая линия: то же, но сплющенная */
+  --brush-mask-line: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60' preserveAspectRatio='none'%3E%3Cpath d='M0.0 16.7 L5.0 15.9 L10.0 18.1 L15.0 17.6 L20.0 17.3 L25.0 19.0 L30.0 18.5 L35.0 17.4 L40.0 17.4 L45.0 18.1 L50.0 17.1 L55.0 17.2 L60.0 15.5 L65.0 16.5 L70.0 14.7 L75.0 14.3 L80.0 14.3 L85.0 14.0 L90.0 12.8 L95.0 13.6 L100.0 14.0 L105.0 13.4 L110.0 13.6 L115.0 15.0 L120.0 14.8 L125.0 16.2 L130.0 16.2 L135.0 16.4 L140.0 18.2 L145.0 18.6 L150.0 18.2 L155.0 19.3 L160.0 18.7 L165.0 19.1 L170.0 18.1 L175.0 17.0 L180.0 17.9 L185.0 17.2 L190.0 15.1 L195.0 15.2 L200.0 14.2 L203.9 20.4 L201.0 26.6 L199.7 32.0 L201.6 38.2 L200.0 41.0 L161.8 31.9 L170.7 44.0 L139.6 31.3 L148.4 43.2 L117.3 38.1 L126.2 43.7 L95.1 32.2 L104.0 42.8 L72.9 31.4 L81.8 45.0 L50.7 34.9 L59.6 43.9 L28.4 37.7 L37.3 43.6 L6.2 33.3 L15.1 45.1 L-16.0 38.2 L-7.1 42.6 L2.7 24.0 L1.2 29.7 L-2.9 37.3 L1.0 42.7 Z' fill='%23fff'/%3E%3C/svg%3E");
+  /* Клякса: рваный круг для точек и значков */
+  --brush-mask-dot: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' preserveAspectRatio='none'%3E%3Cpolygon points='186.0 100.0 175.2 136.2 151.6 164.7 121.1 192.7 81.6 180.6 40.9 174.1 15.9 140.5 17.3 100.0 22.1 62.5 45.3 31.4 78.7 6.6 121.7 5.0 160.1 24.7 179.5 61.7' fill='%23fff'/%3E%3C/svg%3E");
+  /* Кольцо: клякса с просветом — для точек «в работе» и «в планах» */
+  --brush-mask-ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' preserveAspectRatio='none'%3E%3Cpolygon fill-rule='evenodd' points='185.5 100.0 179.2 132.8 157.8 157.8 137.0 189.4 100.0 187.9 66.9 179.9 34.8 165.2 11.4 136.7 13.7 100.0 21.5 67.5 39.6 39.6 67.5 21.5 100.0 17.9 136.2 12.6 160.8 39.2 185.0 64.8 151.7 100.0 148.3 120.0 139.6 139.6 119.4 146.8 100.0 150.8 80.2 147.8 60.2 139.8 49.7 120.8 42.6 100.0 48.3 78.6 60.6 60.6 79.8 51.2 100.0 47.7 120.9 49.5 139.1 60.9 151.2 78.8' fill='%23fff'/%3E%3C/svg%3E");
+}
+
+html[data-theme="dark"] .brushed-page {
+  --brush-color: var(--red-light);
+}
+
+/* ---------- кнопка: только текст и мазок ---------- */
+
+/* Мазок на кнопках — только у основных страниц (.brushed-design).
+   У Кодекса и build-with-me своё оформление, их кнопки остались
+   прежними: мазок в фиолетовой плашке и в красной выглядел бы
+   чужеродно. В шапке мазок остался — она общая для всего сайта. */
+
+/* Ни рамки, ни заливки: форму кнопки задаёт сам мазок.
+   Если оставить фон, маска его не вырежет и кнопка останется
+   ровным прямоугольником.
+
+   Тени тоже нет: прежняя красная тень под кнопкой читалась как
+   отражение от пола — элемент старого дизайна. */
+.brushed-design .btn {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+  border: 0;
+  color: #fff;
+  box-shadow: none;
+  transition:
+    transform var(--t-fast),
+    color var(--t-fast);
+}
+
+/* Тёмная тема задаёт фон, рамку и тень кнопки отдельным правилом —
+   оно сильнее простого .btn, значит перебить его нужно явно. */
+html[data-theme="dark"] .brushed-design .btn {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Силуэт мазка: зубцы и рваные торцы. */
+.brushed-design .btn::before {
+  content: "";
+  position: absolute;
+  /* Отступ меньше зубцов: мазок должен чуть вылезать за кнопку. */
+  inset: -3px -2px;
+  z-index: -1;
+  background: var(--brush-color);
+  pointer-events: none;
+  -webkit-mask-image: var(--brush-mask);
+  mask-image: var(--brush-mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+.brushed-design .btn:hover,
+.brushed-design .btn:focus-visible {
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* Кнопка-призрак: только текст, мазок появляется при наведении. */
+.brushed-design .btn--ghost {
+  background: transparent;
+  border: 0;
+  color: var(--brush-color);
+}
+
+.brushed-design .btn--ghost::before {
+  background: transparent;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--brush-grow);
+}
+
+.brushed-design .btn--ghost:hover::before,
+.brushed-design .btn--ghost:focus-visible::before {
+  background: var(--brush-color);
+  transform: scaleX(1);
+}
+
+.brushed-design .btn--ghost:hover,
+.brushed-design .btn--ghost:focus-visible {
+  color: #fff;
+}
+
+html[data-theme="dark"] .brushed-design .btn--ghost {
+  color: var(--red-light);
+}
+
+html[data-theme="dark"] .brushed-design .btn--ghost:hover {
+  /* Прежнее правило заливала кнопку сплошным красным — этого больше
+     нет, под текстом только мазок. */
+  background: transparent;
+  color: #fff;
+}
+
+html[data-theme="dark"] .brushed-design .btn--ghost:hover::before {
+  background: var(--red-light);
+}
+
+/* ---------- кнопки Кодекса ---------- */
+
+/* У Кодекса своё оформление, фиолетовое. Кнопки там остались
+   прежними: мазок в фиолетовой плашке выглядел бы чужеродно.
+   В шапке мазок остался — она общая для всего сайта. */
+body.app.brushed-page {
+  --brush-color: #a99cff;
+}
+
+/* ============================================================
+   Оформление: мазок в деталях
+   ------------------------------------------------------------
+   Мазок из логотипа переносится в оформление страниц: линия под
+   заголовком раздела, точки таймлайна, кромка карточек, метки.
+   Прежние рамки, овалы и ровные полоски убраны — остаётся мазок.
+
+   Класс .brushed-design стоит только на основных страницах, поэтому
+   оформление Кодекса, Noise Dream и build-with-me не затрагивается.
+   ============================================================ */
+
+/* ---------- фон: мягкие градиенты вместо плоского цвета ---------- */
+
+/* Плоский белый (и плоский чёрный) выглядит мёртво. Фон собирается
+   из градиентов: тёплый отсвет сверху, холодный снизу и лёгкое
+   потемнение к верху.
+
+   Подложка лежит под контентом, но над цветом страницы: поэтому у
+   <body> фон прозрачный, а сам цвет берётся от <html>.
+
+   isolation: isolate на <body> здесь быть не должно: он отрезает
+   смешивание слоёв от фона страницы, и светлый логотип-PNG с белой
+   подложкой начинает выделяться белым прямоугольником. */
+.brushed-design {
+  background: transparent;
+}
+
+html[data-theme="dark"] .brushed-design {
+  background: transparent;
+}
+
+.brushed-design::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(1150px 720px at 50% -6%, rgba(170, 0, 0, .085), transparent 62%),
+    radial-gradient(950px 640px at 100% 106%, rgba(36, 52, 96, .075), transparent 62%),
+    linear-gradient(180deg, rgba(170, 0, 0, .012), rgba(36, 52, 96, .022) 72%);
+}
+
+/* На чёрном отсветы видны лучше, поэтому плотнее. */
+html[data-theme="dark"] .brushed-design::before {
+  background:
+    radial-gradient(1100px 700px at 50% -10%, rgba(209, 5, 5, .15), transparent 62%),
+    radial-gradient(900px 620px at 100% 108%, rgba(64, 72, 130, .1), transparent 62%),
+    linear-gradient(180deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, 0) 40%);
+}
+
+/* Логотип в светлой версии теперь с прозрачностью: белая подложка
+   убрана из самого PNG (tools/logo-alpha.mjs). Поэтому смешивать его
+   с фоном не нужно — а раньше это ломало белый прямоугольник. */
+
+/* ---------- меню в шапке ---------- */
+
+/* Шапка общая у всех страниц, поэтому мазок в ней — везде,
+   включая приложения: иначе половина сайта выглядит по-старому.
+   Прежнее подчёркивание — ровная полоска 2px, и подсветка при
+   наведении — прямоугольник. Оба убираем: мазок заменяет и то
+   и другое. */
+.brushed-page .nav a {
+  position: relative;
+  isolation: isolate;
+  border-radius: 0;
+  background: transparent;
+}
+
+.brushed-page .nav a::after {
+  display: none;
+}
+
+.brushed-page .nav a::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  right: 3px;
+  top: 2px;
+  bottom: 2px;
+  z-index: -1;
+  background: rgba(170, 0, 0, .12);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--brush-grow);
+  pointer-events: none;
+  -webkit-mask-image: var(--brush-mask);
+  mask-image: var(--brush-mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  filter: url(#brush-tex);
+}
+
+.brushed-page .nav a:hover {
+  background: transparent;
+}
+
+.brushed-page .nav a:hover::before {
+  transform: scaleX(1);
+}
+
+/* Активный пункт — плотный мазок сразу, как замазанный красным. */
+.brushed-page .nav a[aria-current="page"]::before {
+  background: var(--brush-color);
+  transform: scaleX(1);
+}
+
+.brushed-page .nav a[aria-current="page"] {
+  color: #fff;
+}
+
+html[data-theme="dark"] .brushed-page .nav a::before {
+  background: rgba(209, 5, 5, .24);
+}
+
+html[data-theme="dark"] .brushed-page .nav a[aria-current="page"]::before {
+  background: var(--brush-color);
+}
+
+/* ---------- переключатель языка ---------- */
+
+/* Прежний вид — сегментированный блок в овальной рамке с красной
+   «ползункой» под активным языком. Рамку и ползунку убираем:
+   активный язык помечается мазком. */
+.brushed-page .lang {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  gap: 4px;
+}
+
+.brushed-page .lang::before {
+  display: none;
+}
+
+.brushed-page .lang a {
+  position: relative;
+  isolation: isolate;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  min-width: 0;
+  padding: 5px 10px;
+}
+
+.brushed-page .lang a::before {
+  content: "";
+  position: absolute;
+  inset: -3px -7px;
+  z-index: -1;
+  background: var(--brush-color);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--brush-grow);
+  pointer-events: none;
+  -webkit-mask-image: var(--brush-mask);
+  mask-image: var(--brush-mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  filter: url(#brush-tex);
+}
+
+.brushed-page .lang a:hover::before {
+  transform: scaleX(1);
+}
+
+.brushed-page .lang a[aria-current="true"]::before {
+  transform: scaleX(1);
+}
+
+.brushed-page .lang a[aria-current="true"] {
+  color: #fff;
+  font-weight: 600;
+}
+
+html[data-theme="dark"] .brushed-page .lang {
+  border: 0;
+  background: transparent;
+}
+
+/* У Кодекса своя палитра — рамку и ползунку снимаем и там. */
+body.app.brushed-page .lang {
+  border: 0;
+  background: transparent;
+}
+
+body.app.brushed-page .lang::before {
+  display: none;
+}
+
+/* ---------- кнопка темы ---------- */
+
+/* Круглая рамка прежнего оформления заменена мазком: при наведении
+   под иконкой появляется пятно кисти. */
+.brushed-page .theme-toggle {
+  position: relative;
+  isolation: isolate;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+}
+
+.brushed-page .theme-toggle::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  z-index: -1;
+  border-radius: 50%;
+  background: transparent;
+  transition: background-color var(--t-fast);
+  -webkit-mask-image: var(--brush-mask-dot);
+  mask-image: var(--brush-mask-dot);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+.brushed-page .theme-toggle:hover::before {
+  background: rgba(170, 0, 0, .16);
+}
+
+html[data-theme="dark"] .brushed-page .theme-toggle {
+  border: 0;
+  background: transparent;
+}
+
+html[data-theme="dark"] .brushed-page .theme-toggle:hover::before {
+  background: rgba(209, 5, 5, .3);
+}
+
+/* ---------- линия под заголовком раздела ---------- */
+
+/* Была ровная полоска 84x2. Теперь это мазок: та же длина,
+   но с рваным краем и следом щетины.
+
+   Только основные страницы: у Noise Dream своё оформление, там
+   линия под названием остаётся ровной. */
+.brushed-design .sec-head::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 110px;
+  height: 6px;
+  background: var(--brush-color);
+  -webkit-mask-image: var(--brush-mask-line);
+  mask-image: var(--brush-mask-line);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  filter: url(#brush-tex-line);
+}
+
+/* ---------- разделитель «кисть» ---------- */
+
+/* Разделитель был ровной полосой 68x3 с растущим слева эффектом.
+   Теперь это настоящий мазок: та же анимация, но форма кисти.
+
+   Только основные страницы: у build-with-me своё оформление. */
+.brushed-design .brush {
+  border: 0;
+  height: 16px;
+  width: 130px;
+  background: var(--brush-color);
+  -webkit-mask-image: var(--brush-mask);
+  mask-image: var(--brush-mask);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  filter: url(#brush-tex);
+}
+
+/* ---------- карточки ---------- */
+
+/* Верхняя кромка карточки проступает мазком при наведении.
+   Рамки сверху нет — иначе мазок ложится под неё и не виден.
+   Правило тёмной темы задаёт рамку отдельным селектором и перебило
+   простое .card, поэтому верхнюю границу снимаем явно. */
+.brushed-design .card {
+  position: relative;
+  isolation: isolate;
+  border-top: 0;
+}
+
+html[data-theme="dark"] .brushed-design .card {
+  border-top: 0;
+}
+
+.brushed-design .card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 9px;
+  z-index: 2;
+  background: var(--brush-color);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms cubic-bezier(.22, 1, .36, 1);
+  pointer-events: none;
+  -webkit-mask-image: var(--brush-mask-line);
+  mask-image: var(--brush-mask-line);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  filter: url(#brush-tex-line);
+}
+
+.brushed-design .card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Красная рамка при наведении — прежнее оформление. Её место
+   занял мазок по верхнему краю. */
+.brushed-design a.card:hover {
+  border-color: var(--line);
+}
+
+html[data-theme="dark"] .brushed-design a.card:hover {
+  border-color: #1c1c20;
+  box-shadow: none;
+}
+
+/* Значок в углу карточки — не рамка, а пятно кисти под знаком. */
+.brushed-design .card__mark {
+  position: relative;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+html[data-theme="dark"] .brushed-design .card__mark {
+  border: 0;
+  background: transparent;
+}
+
+.brushed-design .card__mark::before {
+  content: "";
+  position: absolute;
+  inset: -8px -10px;
+  z-index: -1;
+  background: #e9e9e9;
+  -webkit-mask-image: var(--brush-mask-dot);
+  mask-image: var(--brush-mask-dot);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+html[data-theme="dark"] .brushed-design .card__mark::before {
+  background: #1a1a1f;
+}
+
+/* Значок в углу карточки: рамка исчезла, но знак должен остаться
+   читаемым — отделяем его тенью. */
+html[data-theme="dark"] .brushed-design .card__mark img {
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, .6));
+}
+
+/* ---------- метки ---------- */
+
+/* Была рамка 1px. Теперь подпись лежит на пятне кисти. */
+.brushed-design .tag {
+  position: relative;
+  border: 0;
+  padding: 3px 10px;
+  color: var(--ink-soft);
+}
+
+.brushed-design .tag::before {
+  content: "";
+  position: absolute;
+  inset: -2px -5px;
+  z-index: -1;
+  background: rgba(170, 0, 0, .1);
+  -webkit-mask-image: var(--brush-mask-dot);
+  mask-image: var(--brush-mask-dot);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+.brushed-design .tag--red {
+  color: var(--brush-color);
+}
+
+.brushed-design .tag--red::before {
+  background: rgba(170, 0, 0, .2);
+}
+
+html[data-theme="dark"] .brushed-design .tag {
+  border: 0;
+  color: #8b8b95;
+}
+
+html[data-theme="dark"] .brushed-design .tag::before {
+  background: rgba(209, 5, 5, .18);
+}
+
+html[data-theme="dark"] .brushed-design .tag--red {
+  color: var(--red-light);
+}
+
+html[data-theme="dark"] .brushed-design .tag--red::before {
+  background: rgba(209, 5, 5, .34);
+}
+
+/* ---------- роадмап: счётчики ---------- */
+
+/* Плашка с числом: вместо ровного овала — мазок. Рамки и
+   скругления от прежнего оформления убраны. */
+.brushed-design .stat {
+  position: relative;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  gap: 12px;
+  padding: 0;
+}
+
+html[data-theme="dark"] .brushed-design .stat {
+  border: 0;
+  background: transparent;
+}
+
+/* Под числом — мазок, как под названием на главной. Пятно за
+   плашкой не годилось: соседние плашки слипались в одну полосу. */
+.brushed-design .stat__num {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 9px;
+}
+
+.brushed-design .stat__num::after {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -6px;
+  bottom: 0;
+  height: 6px;
+  background: var(--brush-color);
+  -webkit-mask-image: var(--brush-mask-line);
+  mask-image: var(--brush-mask-line);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  filter: url(#brush-tex-line);
+}
+
+/* ---------- роадмап: точки таймлайна ---------- */
+
+/* Точка была ровным кружком с рамкой. Теперь — мазок: форма
+   задана маской, без рамки. */
+.brushed-design .tl__dot {
+  position: absolute;
+  left: -2px;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--paper);
+  -webkit-mask-image: var(--brush-mask-dot);
+  mask-image: var(--brush-mask-dot);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+html[data-theme="dark"] .brushed-design .tl__dot {
+  border: 0;
+  background: #0a0a0c;
+}
+
+.brushed-design .tl__item--done .tl__dot {
+  background: var(--brush-color);
+}
+
+html[data-theme="dark"] .brushed-design .tl__item--done .tl__dot {
+  background: var(--red-light);
+}
+
+/* «В работе» — кольцо из мазка, «в планах» — то же бледнее. */
+.brushed-design .tl__item--wip .tl__dot {
+  background: var(--brush-color);
+  -webkit-mask-image: var(--brush-mask-ring);
+  mask-image: var(--brush-mask-ring);
+}
+
+.brushed-design .tl__item--plan .tl__dot {
+  width: 18px;
+  height: 18px;
+  top: 2px;
+  border: 0;
+  background: var(--line);
+  -webkit-mask-image: var(--brush-mask-ring);
+  mask-image: var(--brush-mask-ring);
+}
+
+html[data-theme="dark"] .brushed-design .tl__item--wip .tl__dot {
+  background: var(--red-light);
+}
+
+html[data-theme="dark"] .brushed-design .tl__item--plan .tl__dot {
+  border: 0;
+  background: #2a2a31;
+}
+
+/* Линия между точками — тоже мазок, но узкий: полоса шириной
+   во всю линию смотрелась бы полосой, а не следом кисти. */
+.brushed-design .tl__item:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 16px;
+  width: 3px;
+  height: 100%;
+  border-radius: 0;
+  background: var(--line);
+  -webkit-mask-image: var(--brush-mask-line);
+  mask-image: var(--brush-mask-line);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+html[data-theme="dark"] .brushed-design .tl__item:not(:last-child)::before {
+  background: #24242a;
+}
+
+/* ---------- роадмап: значки статусов ---------- */
+
+/* Точка перед статусом — мазок. Рамки нет: она шла от прежнего
+   оформления и ложилась поверх мазка. */
+.brushed-design .status {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0 2px 18px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+html[data-theme="dark"] .brushed-design .status {
+  border: 0;
+}
+
+.brushed-design .status::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: currentColor;
+  -webkit-mask-image: var(--brush-mask-dot);
+  mask-image: var(--brush-mask-dot);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+/* ---------- заголовок на главной ---------- */
+
+/* Под «F Works» — мазок. Тот же приём, что у логотипа: буква
+   нарисована кистью, значит и подпись под ней должна выглядеть
+   нарисованной. */
+.brushed-design .hero h1 {
+  position: relative;
+  display: inline-block;
+  padding-bottom: 16px;
+}
+
+.brushed-design .hero h1::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 120px;
+  height: 9px;
+  margin-left: -60px;
+  background: var(--brush-color);
+  -webkit-mask-image: var(--brush-mask-line);
+  mask-image: var(--brush-mask-line);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  filter: url(#brush-tex-line);
+}
+
+/* ---------- «Без подписок» в слогане ---------- */
+
+/* Красное слово подчёркивается мазком, а не цветом. */
+.brushed-design .slogan span {
+  position: relative;
+  display: inline-block;
+  color: var(--brush-color);
+}
+
+.brushed-design .slogan span::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  right: -3px;
+  bottom: -5px;
+  height: 6px;
+  background: var(--brush-color);
+  opacity: .5;
+  -webkit-mask-image: var(--brush-mask-line);
+  mask-image: var(--brush-mask-line);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+/* ---------- 404 ---------- */
+
+/* Число «404» нарисовано мазком. */
+.brushed-design .nf__code {
+  position: relative;
+  display: inline-block;
+  color: var(--brush-color);
+}
+
+.brushed-design .nf__code::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 10%;
+  width: 76%;
+  height: 30px;
+  margin-left: -38%;
+  background: var(--brush-color);
+  opacity: .3;
+  -webkit-mask-image: var(--brush-mask-line);
+  mask-image: var(--brush-mask-line);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+/* ============================================================
+   Тёмная тема
+   ------------------------------------------------------------
+   На чёрном мазок светлее и мягче: тёмно-красный #aa0000 на чёрном
+   читается тяжело, а #d10505 — тот самый оттенок, что у логотипа
+   в тёмной версии. Сам мазок задаётся переменной --brush-color,
+   здесь — только те места, где цвет задан отдельно.
+   ============================================================ */
+
+html[data-theme="dark"] .brushed-design .slogan span {
+  color: #ff5c5c;
+}
+
+html[data-theme="dark"] .brushed-design .slogan span::after {
+  opacity: .6;
+}
+
+html[data-theme="dark"] .brushed-design .nf__code::after {
+  opacity: .45;
+}
+
+/* ============================================================
+   Светлая тема
+   ------------------------------------------------------------
+   На белом мазок плотнее: тонкий #d10505 на белом почти сливается,
+   поэтому в светлой теме он темнее — #aa0000, как в самом логотипе.
+   Это уже сделано переменной --brush-color; здесь — только пятна,
+   которым нужен свой оттенок бумаги.
+   ============================================================ */
+
+html:not([data-theme="dark"]) .brushed-design .nf__code::after {
+  opacity: .22;
+}
