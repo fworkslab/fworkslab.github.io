@@ -5,4 +5,4 @@ Contact: https://github.com/fworkslab/.github/security/advisories/new
 Policy: https://github.com/fworkslab/.github/security/policy
 Preferred-Languages: ru, en
 Canonical: https://fworkslab.github.io/.well-known/security.txt
-Expires: 2027-11-14T11:02:32Z
+Expires: 2027-11-16T11:16:22Z
